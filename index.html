@@ -956,7 +956,7 @@ function showOneAns(type,idx){
   if(box.classList.contains('show')){box.className='ans-box';return;}
   box.className='ans-box show reveal';
   let ansHtml=q.a;
-  if(type==='code')ansHtml=hlPython(ansHtml);
+  if(type==='code')ansHtml=hlPython(ansHtml.replace(/\n/g,'<br>'));
   box.innerHTML=`<div class="ans-title">${SVG.eye} 参考答案</div>${ansHtml}`;
   renderMath();
 }
