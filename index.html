@@ -91,7 +91,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 .nav-type:hover{background:var(--surface2);color:var(--text2)}
 .nav-type.active{color:var(--primary);font-weight:600}
 .nav-type .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.dot-mc{background:#4f46e5}.dot-tf{background:#059669}.dot-sa{background:#d97706}.dot-fill{background:#7c3aed}.dot-calc{background:#dc2626}.dot-qa{background:#0891b2}.dot-essay{background:#be185d}.dot-code{background:#dc2626}
+.dot-mc{background:#4f46e5}.dot-tf{background:#059669}.dot-sa{background:#d97706}.dot-fill{background:#7c3aed}.dot-calc{background:#dc2626}.dot-qa{background:#0891b2}.dot-essay{background:#be185d}.dot-code{background:#dc2626}.dot-note{background:#0ea5e9}
 .nav-type .cnt{margin-left:auto;font-size:.7rem;font-weight:700;padding:1px 6px;border-radius:8px;background:var(--surface2);color:var(--text3)}
 .menu-btn{display:none}
 .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;opacity:0;transition:opacity .3s}
@@ -110,7 +110,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 .type-header{display:flex;align-items:center;gap:10px;margin:32px 0 16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
 .type-header:first-of-type{margin-top:0}
 .type-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:.78rem;font-weight:700;color:#fff;flex-shrink:0}
-.type-badge.mc{background:#4f46e5}.type-badge.tf{background:#059669}.type-badge.sa{background:#d97706}.type-badge.fill{background:#7c3aed}.type-badge.qa{background:#0891b2}.type-badge.essay{background:#be185d}.type-badge.code{background:#dc2626}
+.type-badge.mc{background:#4f46e5}.type-badge.tf{background:#059669}.type-badge.sa{background:#d97706}.type-badge.fill{background:#7c3aed}.type-badge.qa{background:#0891b2}.type-badge.essay{background:#be185d}.type-badge.code{background:#dc2626}.type-badge.note{background:#0ea5e9}
 .type-title{font-size:.95rem;font-weight:700;color:var(--text)}
 .q-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px 10px;margin-bottom:12px;transition:var(--transition)}
 .q-card:hover{box-shadow:var(--shadow);border-color:var(--border2)}
@@ -127,6 +127,10 @@ pre .st{color:#059669}
 .exam-table th{background:var(--primary-light);color:var(--primary);font-weight:700;padding:8px 14px;border:1px solid var(--border);text-align:center}
 .exam-table td{padding:7px 14px;border:1px solid var(--border);text-align:center}
 .exam-table tr:nth-child(even){background:var(--surface2)}
+.note-h{font-size:1.05rem;font-weight:700;color:var(--primary);margin-bottom:12px;padding:0 4px}
+.note-c{font-size:.9rem;line-height:1.8;padding:0 4px;color:var(--text)}
+.note-c b{color:var(--accent);font-weight:700}
+.note-c br{margin-bottom:6px}
 .options{display:flex;flex-direction:column;gap:8px}
 .opt{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--border);cursor:pointer;transition:var(--transition);user-select:none}
 .opt:hover{border-color:var(--primary);background:var(--primary-light)}
@@ -759,33 +763,19 @@ sa:[
 code:[
 {q:"使用Jupyter Notebook编写程序，生成函数 $y=x^3+2x^2$ 的图像，且 $x \\in [-2,0.5]$，要求线条颜色为绿色、线型为星型。",a:"import numpy as np\nimport matplotlib.pyplot as plt\nx=np.arange(-2,0.5,0.3)\ny=x**3+2*x**2\nplt.plot(x,y,'g*')\nplt.show()"}
 ]},
-ml4:{title:"期末知识点梳理",icon:4,focus:"十大核心知识点·概念辨析·评估指标·模型对比",
-mc:[
-{q:"以下哪种评估指标适用于二分类不平衡数据集？",o:["准确率(Accuracy)","精确率(Precision)","召回率(Recall)","F1值"],a:3},
-{q:"Sigmoid函数的输出范围是（ ）。",o:["(-1,1)","(0,1)","[0,+∞)","(-∞,+∞)"],a:1},
-{q:"在SVM中，将低维数据映射到高维空间从而解决线性不可分问题的是（ ）。",o:["松弛变量","核函数","软间隔","硬间隔"],a:1},
-{q:"Bagging与Boosting的主要区别在于（ ）。",o:["基学习器类型不同","样本采样方式与训练关系不同","损失函数不同","使用的数据集不同"],a:1},
-{q:"K-Means聚类算法中，需要预先指定的参数是（ ）。",o:["邻域半径ε","簇数k","最小样本数MinPts","距离度量方式"],a:1},
-{q:"以下激活函数中，输出均值接近0、有利于缓解梯度消失的是（ ）。",o:["Sigmoid","Tanh","ReLU","Softmax"],a:1},
-{q:"朴素贝叶斯算法中\"朴素\"的含义是（ ）。",o:["计算简单","假设特征之间条件独立","无需训练过程","仅适用于二分类"],a:1},
-{q:"以下属于无监督学习算法的是（ ）。",o:["逻辑回归","K近邻","K-Means聚类","决策树"],a:2},
-{q:"ROC曲线下方的面积称为（ ），用于衡量模型的整体性能。",o:["F1值","AUC值","准确率","召回率"],a:1},
-{q:"DBSCAN聚类算法的两个核心参数是（ ）。",o:["簇数k和迭代次数","邻域半径ε和最小样本数MinPts","距离度量和聚类中心","学习率和正则化系数"],a:1}
-],
-tf:[],
-fill:[
-{q:"二分类混淆矩阵中，TP表示___________，FP表示___________。",a:"真正例(将正类预测为正类)、假正例(将负类预测为正类)"},
-{q:"精确率(Precision)的公式为___________；召回率(Recall)的公式为___________。",a:"$\\frac{TP}{TP+FP}$、$\\frac{TP}{TP+FN}$"},
-{q:"F1值是精确率和召回率的___________平均。",a:"调和"},
-{q:"随机森林的双重随机性是指___________随机采样和___________随机选择。",a:"样本、特征"},
-{q:"Boosting算法通过拟合___________逐步提升性能，GBDT的基学习器通常为___________。",a:"残差(负梯度)、决策树"},
-{q:"K-Means聚类的优化目标是最小化样本到簇中心的___________。",a:"距离平方和(SSE)"},
-{q:"神经网络训练过程中，___________传播用于计算输出值，___________传播用于计算梯度更新权重。",a:"前向、反向"},
-{q:"SVM中，___________间隔严格要求所有样本正确分类，___________间隔允许部分样本分类错误。",a:"硬、软"},
-{q:"数据预处理包括___________、___________、___________等步骤。",a:"缺失值处理、标准化/归一化、异常值处理"}
-],
-sa:[]
-}
+ml4:{title:"期末知识点梳理",icon:4,focus:"十大核心知识点·概念辨析·模型对比·评估指标",
+note:[
+{h:"一、机器学习概述与基本流程",c:"<b>机器学习：</b>让计算机从数据中学习规律，对新数据进行预测或决策，无需显式编程。<br><br><b>按任务类型分三大类：</b><br>• <b>监督学习：</b>有标签数据，如分类（离散）、回归（连续）。<br>• <b>无监督学习：</b>无标签数据，如聚类、降维。<br>• <b>半监督学习：</b>少量有标签 + 大量无标签数据。<br><br><b>核心流程：</b>数据预处理 → 特征提取 → 模型训练 → 模型评估 → 预测应用"},
+{h:"二、线性回归与逻辑回归",c:"<b>线性回归：</b>y = w₁x₁ + w₂x₂ + ... + wₙxₙ + b，输出连续值。损失函数为MSE（均方误差）。参数求解可用最小二乘法（解析解）或梯度下降法。正则化：岭回归（L2）、Lasso回归（L1）。<br><br><b>逻辑回归：</b>用于二分类，通过Sigmoid函数将线性输出映射到(0,1)概率值。σ(z) = 1/(1+e⁻ᶻ)。决策边界以0.5为阈值。损失函数为对数似然损失（交叉熵损失）。<br><br><b>对比：</b>线性回归→回归连续值；逻辑回归→分类离散标签。线性回归用MSE，逻辑回归用交叉熵损失。"},
+{h:"三、K近邻算法（KNN）",c:"<b>原理：</b>计算待预测样本与所有训练样本的距离，找最近k个近邻，分类用投票、回归取平均。<br><br><b>k值选择：</b>过大→欠拟合，过小→过拟合，需交叉验证确定。<br><br><b>优点：</b>原理简单，无需训练（惰性学习），适合多分类，k较大时对异常值不敏感。<br><b>缺点：</b>预测计算量大，需存储全部数据，对特征尺度敏感需标准化。"},
+{h:"四、朴素贝叶斯",c:"<b>原理：</b>基于贝叶斯定理，假设特征之间条件独立（"朴素"含义）。<br>公式：P(Y|X) = P(X|Y)·P(Y) / P(X)<br>核心：先验概率P(Y) + 条件概率（似然）P(X|Y)。<br><br><b>分类决策：</b>计算每个类别的后验概率P(Y|X)，选择最大的作为预测结果。<br><br><b>常见变体：</b>高斯朴素贝叶斯（连续数据）、多项式朴素贝叶斯（文本分类）、伯努利朴素贝叶斯（二值特征）。"},
+{h:"五、决策树",c:"<b>核心思想：</b>基于特征对样本递归划分，形成树形结构。<br><br><b>三种经典算法对比：</b><br>• <b>ID3：</b>用信息增益，多叉树，偏向取值多的特征。<br>• <b>C4.5：</b>用信息增益比，多叉树，克服ID3的多值偏向。<br>• <b>CART：</b>用基尼指数/平方误差，二叉树，可分类也可回归。<br><br><b>信息熵：</b>H(D) = -Σpᵢlog₂pᵢ，衡量数据不确定性。<br><b>信息增益：</b>Gain(D,A) = H(D) - H(D|A)<br><b>信息增益比：</b>Gain_ratio = Gain(D,A) / Hₐ(D)"},
+{h:"六、支持向量机（SVM）",c:"<b>核心思想：</b>寻找最优超平面，使两类样本间隔最大化。<br><br><b>关键概念：</b><br>• <b>硬间隔：</b>严格要求全部正确分类，适用于线性可分。<br>• <b>软间隔：</b>引入松弛变量，允许部分错误，适用于近似线性可分。<br>• <b>核函数：</b>将低维映射到高维，解决线性不可分。<br><br><b>常用核函数：</b>线性核 K(x,y)=xᵀy；多项式核 (xᵀy+c)ᵈ；高斯核(RBF) exp(-γ‖x-y‖²) 最常用；Sigmoid核 tanh(αxᵀy+c)。"},
+{h:"七、集成学习",c:"<b>Bagging vs Boosting：</b><br>• Bagging：有放回随机采样（Bootstrap），基学习器并行训练相互独立，主要降低方差，代表为随机森林。<br>• Boosting：根据错误率调整样本权重，串行训练后一个纠正前一个，主要降低偏差，代表为AdaBoost、GBDT、XGBoost。<br><br><b>随机森林：</b>Bagging典型代表，基学习器为决策树。双重随机性：样本随机采样 + 特征随机选择。分类用多数投票，回归取平均值。<br><br><b>Boosting系列：</b>AdaBoost调整样本权重；GBDT拟合残差（负梯度）；XGBoost支持二阶导数、正则化、并行计算。"},
+{h:"八、聚类算法（无监督学习）",c:"<b>K-Means：</b>最小化样本到簇中心的距离平方和（SSE）。步骤：①随机选k个簇中心→②分配样本到最近簇→③更新簇中心→重复②③直到收敛。需预先指定k，对初始中心敏感，适合球形簇。<br><br><b>层次聚类：</b>自底向上（凝聚）或自顶向下（分裂）构建聚类树。无需预先指定簇数。<br><br><b>DBSCAN：</b>基于密度的聚类，可发现任意形状的簇。核心参数：邻域半径ε和最小样本数MinPts。能识别噪声点，无需指定簇数。"},
+{h:"九、神经网络",c:"<b>基本结构：</b>输入层、隐藏层、输出层组成，神经元通过权重连接。激活函数为模型引入非线性。<br><br><b>常用激活函数：</b><br>• Sigmoid：σ(z)=1/(1+e⁻ᶻ)，输出(0,1)<br>• Tanh：(eᶻ-e⁻ᶻ)/(eᶻ+e⁻ᶻ)，输出(-1,1)<br>• ReLU：max(0,z)，输出[0,+∞)<br>• Softmax：eᶻⁱ/Σeᶻʲ，输出(0,1)且和为1<br><br><b>训练过程：</b>前向传播逐层计算输出 → 反向传播用链式法则计算梯度 → 优化算法（SGD、Adam等）更新权重。"},
+{h:"十、模型评估与Python工具",c:"<b>二分类评估指标：</b><br>• <b>准确率(Accuracy)：</b>正确预测数/总样本数<br>• <b>精确率(Precision)：</b>TP/(TP+FP)<br>• <b>召回率(Recall)：</b>TP/(TP+FN)<br>• <b>F1值：</b>精确率和召回率的调和平均<br>• <b>ROC曲线与AUC值：</b>衡量模型在不同阈值下的整体性能<br><br><b>Python第三方库：</b><br>• Scikit-learn(sklearn)：核心ML库<br>• NumPy：数值计算基础库<br>• Pandas：数据处理与分析<br>• Matplotlib：数据可视化"}
+]}
 };
 
 // Constants (SVG, icons, COURSE_META) already declared in first script block
@@ -819,7 +809,7 @@ function buildSidebar(){
   const icons=curCourse?COURSE_META[curCourse].icons:DS_ICONS;
   let h=`<div class="sidebar-section"><div class="sidebar-label">章节</div>`;
   for(let c in courseData){
-    const ch=courseData[c],mc=ch.mc?ch.mc.length:0,tf=ch.tf?ch.tf.length:0,fill=ch.fill?ch.fill.length:0,qa=ch.qa?ch.qa.length:0,essay=ch.essay?ch.essay.length:0,sa=ch.sa?ch.sa.length:0,code=ch.code?ch.code.length:0;
+    const ch=courseData[c],mc=ch.mc?ch.mc.length:0,tf=ch.tf?ch.tf.length:0,fill=ch.fill?ch.fill.length:0,qa=ch.qa?ch.qa.length:0,essay=ch.essay?ch.essay.length:0,sa=ch.sa?ch.sa.length:0,code=ch.code?ch.code.length:0,note=ch.note?ch.note.length:0;
     const isActive=c===cur;
     h+=`<button class="nav-ch${isActive?' active':''}" data-ch="${c}" onclick="pickCh('${c}',this)">${icons[ch.icon]||icons[0]}${ch.title}</button>`;
     h+=`<div class="nav-types${isActive?' open':''}" id="types-${c}">`;
@@ -830,6 +820,7 @@ function buildSidebar(){
     if(essay)h+=`<button class="nav-type" onclick="pickType('${c}','essay',this)"><span class="dot dot-essay"></span>论述题<span class="cnt">${essay}</span></button>`;
     if(sa)h+=`<button class="nav-type" onclick="pickType('${c}','sa',this)"><span class="dot dot-sa"></span>简答题<span class="cnt">${sa}</span></button>`;
     if(code)h+=`<button class="nav-type" onclick="pickType('${c}','code',this)"><span class="dot dot-code"></span>代码题<span class="cnt">${code}</span></button>`;
+    if(note)h+=`<button class="nav-type" onclick="pickType('${c}','note',this)"><span class="dot dot-note"></span>知识点<span class="cnt">${note}</span></button>`;
     h+=`</div>`;
   }
   h+=`</div>`;
@@ -901,6 +892,12 @@ function render(){
     ch.code.forEach((q,i)=>{
       let qHtml=esc(q.q).replace(/&lt;pre&gt;([\s\S]*?)&lt;\/pre&gt;/g,(m,code)=>'<pre>'+hlPython(code)+'</pre>');
       h+=`<div class="q-card" id="code-${i}"><div class="q-body"><div class="q-stem"><span class="q-num">${i+1}</span><span>${qHtml}</span></div><textarea class="sa-area" placeholder="输入你的代码/答案..."></textarea><button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="showOneAns('code',${i})">查看答案</button><div class="ans-box" id="code-ans-${i}"></div></div></div>`;
+    });
+  }
+  if(ch.note&&ch.note.length&&show('note')){
+    h+=`<div class="type-header" id="sec-note"><span class="type-badge note">知识点</span><span class="type-title">共 ${ch.note.length} 节</span></div>`;
+    ch.note.forEach((q,i)=>{
+      h+=`<div class="q-card"><div class="q-body"><div class="note-h">${esc(q.h)}</div><div class="note-c">${q.c}</div></div></div>`;
     });
   }
   m.innerHTML=h;
