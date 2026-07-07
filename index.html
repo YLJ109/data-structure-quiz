@@ -916,6 +916,7 @@ function render(){
         q.o.forEach((o,oi)=>{const s=o.replace(/^[A-Da-d][.、]\s*/,'');h+=`<div class="opt" data-idx="${i}" data-val="${oi}" onclick="pickMC(${i},${oi})"><span class="opt-dot"></span><span class="opt-label"><b>${L[oi]}</b>${esc(s)}</span></div>`;});
         h+=`</div></div></div>`;
       });
+      }}
   m.innerHTML=h;
   renderMath();
 }
