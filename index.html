@@ -178,7 +178,7 @@ pre .st{color:#059669}
 </head>
 <body>
 <!-- ===== LANDING ===== -->
-<div class="landing" id="landing">
+<div class="landing" id="landing" style="display:none">
   <div class="landing-title"><h1>考试刷题系统</h1><p>选择课程开始刷题</p></div>
   <div class="course-grid">
     <div class="course-card" onclick="enterCourse('os')">
@@ -188,7 +188,7 @@ pre .st{color:#059669}
   </div>
 </div>
 <!-- ===== APP ===== -->
-<div id="app" style="display:none">
+<div id="app" style="display:block">
 <header class="header">
   <div class="header-left">
     <button class="btn-icon menu-btn" onclick="toggleSidebar()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
@@ -999,6 +999,8 @@ function renderMath(){
     }
   },100);
 }
+
+document.addEventListener('DOMContentLoaded',function(){enterCourse('os');});
 
 </script>
 </body>
