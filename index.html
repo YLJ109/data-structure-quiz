@@ -108,9 +108,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 .type-header{display:flex;align-items:center;gap:10px;margin:32px 0 16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
 .type-header:first-of-type{margin-top:0}
 .type-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:.78rem;font-weight:700;color:#fff;flex-shrink:0}
-.type-badge.mc{background:#4f46e5}.type-badge.tf{background:#059669}.type-badge.sa{background:#d97706}.type-badge.fill{background:#7c3aed}.type-badge.qa{background:#0891b2}.type-badge.essay{background:#be185d}.type-badge.code{background:#dc2626}.type-badge.note{background:#0ea5e9}.type-badge.longest{background:#e11d48}
-.dot-longest{background:#e11d48}
-.tag-longest{display:inline-block;font-size:.68rem;font-weight:700;color:#fff;background:#e11d48;padding:1px 8px;border-radius:10px;margin-left:6px;vertical-align:middle}
+.type-badge.mc{background:#4f46e5}.type-badge.tf{background:#059669}.type-badge.sa{background:#d97706}.type-badge.fill{background:#7c3aed}.type-badge.qa{background:#0891b2}.type-badge.essay{background:#be185d}.type-badge.code{background:#dc2626}.type-badge.note{background:#0ea5e9}.type-badge.multi{background:#f59e0b}
 .type-title{font-size:.95rem;font-weight:700;color:var(--text)}
 .q-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px 10px;margin-bottom:12px;transition:var(--transition)}
 .q-card:hover{box-shadow:var(--shadow);border-color:var(--border2)}
@@ -144,6 +142,9 @@ pre .st{color:#059669}
 .opt.correct .opt-dot svg{width:11px;height:11px;color:#fff;display:block}
 .opt.wrong .opt-dot{border-color:var(--error);background:var(--error)}
 .opt.wrong .opt-dot svg{width:11px;height:11px;color:#fff;display:block}
+.q-card{position:relative}.q-card .del-btn{position:absolute;top:8px;right:8px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:none;background:#fee2e2;color:#dc2626;cursor:pointer;font-size:14px;line-height:1;z-index:2;opacity:0;transition:var(--transition)}.q-card:hover .del-btn{opacity:1}.q-card .del-btn:hover{background:#dc2626;color:#fff}
+.multi-options .opt.selected .opt-dot{border-color:#f59e0b;background:#f59e0b}
+.multi-options .opt.selected .opt-dot::after{content:"";width:7px;height:7px;background:#fff}
 .opt-label{font-size:.88rem;line-height:1.55}
 .opt-label b{font-weight:700;color:var(--text);margin-right:4px}
 .tf-group{display:flex;gap:10px}
@@ -224,7 +225,6 @@ const OS_ICONS=['<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
 const ML_ICONS=['<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>','<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>','<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>','<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>','<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>'];
 const COURSE_META={ds:{title:'数据结构',icons:DS_ICONS},os:{title:'操作系统',icons:OS_ICONS},ml:{title:'机器学习',icons:ML_ICONS}};
 let courseData={},curCourse='',cur='',curType='',A={};
-function initA(){A={};for(let c in courseData){A[c]={mc:{},tf:{}};if(courseData[c].mc)courseData[c].mc.forEach((_,i)=>A[c].mc[i]=false);if(courseData[c].tf)courseData[c].tf.forEach((_,i)=>A[c].tf[i]=false);}}
 </script>
 <script>
 // ===== DATA =====
@@ -353,7 +353,7 @@ essay:[
 {q:"10. 在生产流水线上有三个工序：取件(getter)、传送(transfer)、加工(processor)。试用信号量的 P、V 操作实现 getter、transfer、processor 之间的同步与互斥关系，补全下面代码中的空白。<pre>信号量 g_sema = (空白1);\n信号量 t_sema = (空白2);\n信号量 p_sema = (空白3);\nvoid getter() {\n  while(true) {\n    P(g_sema);\n    取件工序操作\n    V((空白4));\n  }\n}\nvoid transfer() {\n  while(true) {\n    P((空白5));\n    传送工序操作\n    V((空白6));\n  }\n}\nvoid processor() {\n  while(true) {\n    P((空白7));\n    加工工序操作\n    V((空白8));\n  }\n}</pre>",a:"<pre>g_sema = 1;  // 初始可取件\nt_sema = 0;  // 初始不可传送\np_sema = 0;  // 初始不可加工\n\nvoid getter() {\n  while(true) {\n    P(g_sema);\n    取件工序操作\n    V(t_sema);   // 空白4: 取完件后通知可传送\n  }\n}\nvoid transfer() {\n  while(true) {\n    P(t_sema);   // 空白5: 等待可传送信号\n    传送工序操作\n    V(p_sema);   // 空白6: 传完后通知可加工\n  }\n}\nvoid processor() {\n  while(true) {\n    P(p_sema);   // 空白7: 等待可加工信号\n    加工工序操作\n    V(g_sema);   // 空白8: 加工完后通知可取件\n  }\n}</pre>"},
 {q:"11. 支持虚拟页式存储管理的系统中，硬件参数如下：虚拟地址空间为 16 位，页面大小为 1KB，物理内存大小为 4KB（共有 4 个物理块）。某进程页表如下：<table class='exam-table'><tr><th>页号</th><th>物理块号</th><th>有效位</th></tr><tr><td>0</td><td>2</td><td>1</td></tr><tr><td>1</td><td>5</td><td>1</td></tr><tr><td>2</td><td>—</td><td>0</td></tr><tr><td>3</td><td>8</td><td>1</td></tr></table>进程的内存访问指令序列（10进制）：1040 → 2069 → 4128 → 3088\n\n(1) 地址 1040 的页号和页内偏移量？对应物理地址？\n(2) 地址 2069 的页号和页内偏移量？是否产生中断？\n(3) 地址 4128 的页号和页内偏移量？是否产生中断？\n\n第二部分：假设采用 OPT 算法，初始已调入第 0、1、3 页（物理块 2,5,8），页号引用序列为 1,3,2,3,1,0：\n(4) 画出 OPT 置换过程表。\n(5) 计算缺页率。",a:"<b>第一部分：地址转换</b><br>页面大小 1KB = 2<sup>10</sup>，偏移占 10 位，页号占 16-10=6 位。<br><br><b>(1)</b> 1040 = 1024+16 → 页号=1，偏移=16<br>页表：页号1→物理块5 → 物理地址 = 5×1024+16 = <b>5136</b><br><br><b>(2)</b> 2069 = 2048+21 → 页号=2，偏移=21<br>页表：页号2 有效位=0 → <b>缺页中断</b><br><br><b>(3)</b> 4128 = 4×1024+32 → 页号=4，偏移=32<br>页号4 超出页表范围 → <b>越界中断</b><br><br><b>第二部分：OPT 算法</b><br>初始：物理块[2,5,8] → 页面[0,1,3]<br><table class='exam-table'><tr><th>引用</th><th>1</th><th>3</th><th>2</th><th>3</th><th>1</th><th>0</th></tr><tr><td>物理块2</td><td>1</td><td>1</td><td>2</td><td>2</td><td>2</td><td>0</td></tr><tr><td>物理块5</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr><tr><td>物理块8</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td></tr><tr><td>是否缺页</td><td>命中</td><td>命中</td><td>缺页</td><td>命中</td><td>命中</td><td>缺页</td></tr></table><br><b>(5)</b> 缺页 2 次，缺页率 = 2/6 ≈ <b>33.3%</b>"}
 ]},
-os8:{title:"答案最长精选",icon:7,focus:"正确选项文字最长 — 综合检测",
+os8:{title:"答案最长精选",icon:7,focus:"正确选项文字最长 — 综合检测 73题",
 mc:[
 {q:"父进程中fork()调用成功后返回的是",o:["0","-1","子进程PID","NULL"],a:2},
 {q:"fork()之后两个进程并发执行的起始点是",o:["main()函数入口","fork()调用之后的下一条语句","exit()调用处","exec()调用处"],a:1},
@@ -390,6 +390,45 @@ mc:[
 {q:"磁盘冗余阵列(RAID)技术的主要目的是( )。",o:["减少磁盘的内部碎片","提高磁盘的可靠性和 I/O 速度","降低磁盘的功耗","增加磁盘的转速"],a:1},
 {q:"子进程exit()后最先进行的内核操作是",o:["释放用户空间内存","发送SIGCHLD","归还PID","删除PCB"],a:0},
 {q:"如果一个父进程创建了多个子进程(Child A, Child B, Child C)，它调用一次wait(NULL) 后，能够回收哪个子进程的资源?",o:["只能回收 Child A。","只能回收 Child C。","回收第一个终止的子进程。","必须回收所有的子进程。"],a:2}
+,
+  {q:"采用段式存储管理时,一个程序如何分段是在( )决定的。",o:["分配主存","用户编程时","程序执行时","装作业时"],a:1},
+  {q:"用”useradd jerry”命令添加一个用户,这个用户的主目录是什么(选择最合适的答案)",o:["/bin/jerry","/etc/jerry","/home/jerry","/var/jerry"],a:2},
+  {q:"Spooling技术可以变_____________设备为_____________设备。",o:["共享、独占","物理、共享","独占、共享","物理、独占"],a:2},
+  {q:"资源的预先分配策略可以实现死锁的_____________。",o:["检测","预防","避免","恢复"],a:1},
+  {q:"进程所请求的一次打印输出结束后,将使进程状态从( )。",o:["就绪态变为运行态","运行态变为等待态","运行态变为就绪态","等待态变为就绪态"],a:3},
+  {q:"一个分段存储管理系统中,逻辑地址长度为32位,其中段号占8位,则段长最大____字节。",o:["2 32","2 24","2 40","2 8"],a:1},
+  {q:"假脱机技术中,对打印机的操作实际上是用对磁盘存储实现的,用以替代打印机的部分是指_________。",o:["独占设备","虚拟设备","物理设备","共享设备"],a:1},
+  {q:"嵌入式操作系统的重要特点之一是:",o:["系统内核庞大","具有可配置性","仅支持单任务","缺乏实时性"],a:1},
+  {q:"设从磁盘将一块数据传送到缓冲区所用实际为80μs,将缓冲区中数据传送到用户区所用时间为40μs,CPU处理数据所用的时间为30μs。则处理该数据,采用单缓冲传送磁盘数据,系统所用总时间为()。",o:["70μs","110μs","120μs","150μs"],a:2},
+  {q:"在段页式存储系统中,一个作业对应___ 。",o:["多个段表","一个段表,一个页表","一个段表,多个页表","多个段表,多个页表"],a:2},
+  {q:"在并发进程中，访问临界资源的那段代码被称为?",o:["互斥区 (Mutex Zone)","缓冲区 (Buffer)","保护区 (Protection Zone)","临界区 (Critical Section)"],a:3},
+  {q:"swap分区是指( )",o:["硬盘上的第一个逻辑分区","硬盘上的第一个主分区","物理内存的存储区域","虚拟内存所占用的硬盘分区"],a:3},
+  {q:"在请求分页存储管理中，当所访问的页面不在内存时，会产生?( )",o:["越界中断","缺页中断","停机中断","溢出中断"],a:1},
+  {q:"在段页式管理中,每取一次数据,要访问( )次内存。",o:["1","2","4","3"],a:3},
+  {q:"采用SPOOLing技术的目的是 。",o:["提高程序的运行速度","提高主机效率","提高独占设备的利用率","减轻用户编程负担"],a:2},
+  {q:"在可变式分区分配方案中,某一作业完成后,系统收回其主存空间,并与相邻空闲区合并,为此需修改空闲区表,造成空闲区数减1的情况是_______。",o:["有上邻空闲区,也有下邻空闲区","有上邻空闲区,但无下邻空闲区","无上邻空闲区,也无下邻空闲区","有下邻空闲区,但无上邻空闲区"],a:0},
+  {q:"等待当前磁道上的某指定扇区旋转到磁头下所需的时间称为( )。",o:["启动时间","寻找时间","传送时间","延迟时间"],a:3},
+  {q:"进程的动态、并发等特征是利用____________表现出来的。",o:["进程控制块","程序和数据","程序","数据"],a:0},
+  {q:"设读写磁盘时采用双缓冲技术,缓冲区由缓冲区1和缓冲区2组成。若总共读盘2次,每次读盘的数据放入双缓冲区之一,每次读盘需时4ms。读盘前缓冲区是空的。从每个缓冲区把读入的数据送到用户区需0.5ms。用户程序处理一次缓冲区送来的数据需5ms。则从启动读盘到用户程序处理结束,需时____。",o:["17ms","16ms","15ms","14ms"],a:2},
+  {q:"某基于动态分区存储管理的计算机系统,其主存容量为20 MB(初始为空闲),采用最佳适配算法分配内存,分配和释放的顺序为:分配8MB、分配5 MB、分配3 MB、释放8MB,分配3MB,此时主存中最小空闲分区的大小是",o:["1 MB","5 MB","4 MB","8 MB"],a:0},
+  {q:"在单处理机系统中实现并发技术后,( ) 。",o:["进程在一个时刻点上并行运行,CPU与外设间并行工作.","进程在一个时刻点上并行运行,CPU与外设间串行工作.","进程在一个时间段内并行运行,CPU与外设间串行工作.","进程在一个时间段内并行运行,CPU与外设间并行工作。"],a:3},
+  {q:"在双重工作模式下，能够执行特权指令的模式是:",o:["裸机态","用户态(目态)","内核态(管态)","虚拟机态"],a:2},
+  {q:"在以下选项中选出实现打印当前路径下所有文件名的命令。( )",o:["ls –l","ls –a","ls","ls –i"],a:1},
+  {q:"早期UNIX操作系统的存储管理采用_______方案。",o:["固定式分区管理","请求分页","段式管理","可变式分区管理"],a:3},
+  {q:"上下文切换时必须保存的内容不包括________。",o:["进程打开的文件内容","CPU 状态字","程序计数器","通用寄存器"],a:0},
+  {q:"页的逻辑地址形式:页号24位,页内地址10位。内存128M,辅存10G,那么虚拟存储器最大实际容量为_________。",o:["10G","10G+128M","16G","1024K"],a:1},
+  {q:"下面关于虚存的说法正确的是( )。",o:["作业在运行前不必全部装入内存,并且在运行期间不必一直驻留在内存","作业在运行前必须全部装入内存,并且在运行期间必须一直驻留在内存","作业在运行前必须全部装入内存,但在运行期间不必一直驻留在内存","作业在运行前不必全部装入内存,但在运行期间必须一直驻留在内存"],a:0},
+  {q:"CPU输出数据的速度远远高于打印机的打印速度,为了解决这一矛盾,可采用____________。",o:["交换技术","DMA技术","覆盖技术","缓冲技术"],a:3},
+  {q:"银行家算法在解决死锁问题中是用于____________的。",o:["解除死锁","检测死锁","避免死锁","预防死锁"],a:2},
+  {q:"操作系统中,进程之间交换数据的过程称为_____________。",o:["进程共享","进程协调","进程通信","进程同步"],a:2},
+  {q:"进程控制块(PCB)是操作系统中用于管理和控制进程的核心数据结构。PCB 存储在内存的哪个区域?",o:["虚拟地址空间","内核(系统)地址空间","用户地址空间","磁盘的交换分区"],a:1},
+  {q:"从以下选项中选出GCC编译器的正确流程。( )",o:["预处理、编译、汇编、链接","链接、预处理、汇编、编译","预处理、汇编、编译、链接","预处理、链接、汇编、编译"],a:3},
+  {q:"下列哪个信号不能被进程屏蔽和捕捉? ( )",o:["SIGSTOP","SIGCHLD","SIGQUIT","SIGINT"],a:0},
+  {q:"已知用户rhe6的家目录为/home/rhe6,并且该目录中有一个文件a.dat,使用绝对路径表示该文件位置,下列哪项正确?",o:["/home/rhe6/a.dat","/a.dat","/home/rhe6 a.dat","./a.dat"],a:0},
+  {q:"设备处理程序就是()。",o:["通道处理程序","设备分配程序","I/O进程与设备控制器之间的通信程序","缓冲管理程序"],a:2},
+  {q:"将光盘/dev/cdrom安装到/mnt/cdrom的命令是______。( )",o:["mount /mnt/cdrom /dev/hdc","mount /mnt/cdrom /dev/cdrom","mount /dev/cdrom /mnt/cdrom","mount /dev/cdrom"],a:2},
+  {q:"用户在程序设计过程中,若要得到系统功能必须通过( )。",o:["进程调度","系统调用","键盘命令","作业调度"],a:1},
+  {q:"虚存的理论基础是( )。",o:["指令局部性","程序的局部性理论","变量的连续访问","代码的顺序执行"],a:1}
 ]},
 os9:{title:"判断题·答案正确",icon:5,focus:"所有正确答案的判断题 — 综合检测",
 tf:[
@@ -422,6 +461,63 @@ tf:[
 {q:"索引分配方式中，索引块本身也需要占用磁盘空间。",a:true},
 {q:"磁盘高速缓存(Disk Cache)是利用内存中的一部分空间来暂存磁盘中常用的数据信息。",a:true}
 ]},
+os10:{title:"试卷精选",icon:3,focus:"选择题 30 + 多选题 8 + 填空题 12 = 50题",
+mc:[
+  {q:"以下叙述中正确的是_________。",o:["文件被划分成大小相等的若干个物理块,物理块大小一般不固定。","文件系统要负责文件存储空间的管理,但不能完成文件名到物理地址的转换。","逻辑记录是对文件进行存取操作的基本单位。","多级目录结构中,对文件的访问是通过路径名和文件名来进行的。"],a:3},
+  {q:"比较重要的系统配置资料文件，一般来说大部分位于______目录下。( )",o:["/boot","/home","/etc","/usr"],a:2},
+  {q:"在( )操作系统的控制下,计算机能及时处理过程控制装置反馈的信息,并作出响应。",o:["网络","批处理","实时","分时"],a:2},
+  {q:"在Linux系统,当使用”link(链接)”时,可以通过下面哪个选项访问一个文件(选择最合适的)",o:["两个或更多的名字","只能是一个名字","不超过两个名字","每个目录只能是一个名字"],a:0},
+  {q:"n个进程有( )种调度次序。",o:["n!","1","n-1","n"],a:0},
+  {q:"资源的按序分配策略可以破坏( )条件。",o:["不可剥夺资源","循环等待资源","占有切等待资源","互斥使用资源"],a:1},
+  {q:"在UNIX操作系统中,文件的索引结构存放在________中。",o:["目录项","空闲块","超级块","I节点"],a:3},
+  {q:"假设某系统采用分页存储管理，页面大小为 4KB。现有一个 C 语言定义的二维数组 int A[1024][1024](每个 int 占 4 字节)，该数组在内存中按“行优先”方式连续存放，且起始地址恰好位于某页的开头。现有以下两个函数对该数组进行清零操作: 在“请求分页”环境下，若分配给该进程的物理块数远小于数组所需总页数，则关于这两个片段的执行表现，下列说法正确的是( )。",o:["片段 II 的空间局部性更好，因为它是按列访问的，更符合 CPU 调度逻辑","片段 I 只有在数组较小时才具有局部性优势，对于 1024x1024 的大数组无效","片段 I 的空间局部性更好，产生的缺页中断次数远少于片段 II","两个片段产生的缺页中断次数相同，因为它们处理的数据总量完全一致"],a:2},
+  {q:"若进程P一旦被唤醒就能投入运行,系统可能为____。",o:["抢占调度方式,P的优先级高于当前运行的进程","抢占调度方式,就绪队列上的所有进程的优先级皆比P的低","就绪队列为空队列","分时系统,进程P的优先级最高"],a:0},
+  {q:"通常,用户进程被建立后,___________。",o:["随着进程的阻塞或唤醒而撤消与建立","便一直存在于系统中,直到被操作人员撤消","随着运行的正常或不正常结束而撤消","随着时间片轮转而撤消与建立"],a:2},
+  {q:"分析以下脚本代码: #!/bin/sh var=\\\"hello itheima\\\" echo '$var' echo \\\"$var\\\" exit 0 从以下选项中选出正确的执行结果。( )",o:["$var hello itheima","hello itheima hello itheima","hello itheima hello $var","$var $var"],a:0},
+  {q:"为了照顾紧迫型作业,应采用( )。",o:["优先权调度算法","短作业优先调度算法","先来服务调度算法","时间片轮转调度算法"],a:0},
+  {q:"在多进程的系统中,为了保证公共变量的完整性,各进程应互斥进入临界区,所谓临界区是指( )。",o:["同步机制","一段数据","一段程序","一个缓冲区"],a:2},
+  {q:"操作系统处理缺页中断时，选择一种好的调度算法对主存和辅存中信息进行高效调度，尽可能地避免?( )",o:["抖动","碎片","多重中断","CPU空闲"],a:0},
+  {q:"在下列调度算法中,__不属于进程调度算法。",o:["优先级调度法","FIFO","电梯调度法","时间片轮转法"],a:2},
+  {q:"虚拟存储技术打破了传统存储管理中“一次性”的限制，其技术基础是( )。",o:["存储器的分级管理","程序的并发执行","程序的局部性原理","硬件的高速运算能力"],a:2},
+  {q:"设文件索引节点中有7个地址项,其中4个地址项为直接地址索引,2个地址项是一级间接地址索引,1个地址项是二级间接地址索引,每个地址项大小为4字节,若磁盘索引块和磁盘数据块大小均为256字节,则可表示的单个文件的最大长度是____。",o:["16513KB","519KB","1057KB","33KB"],a:2},
+  {q:"下列关于线程的描述正确的是________。",o:["线程崩溃不影响同进程其他线程","线程共享地址空间","线程拥有独立文件描述符表","线程是资源分配单位"],a:1},
+  {q:"已经当前目录下有一个子目录temp,在temp中有一个文件abc.data,使用相对路径如何表示该文件位置?",o:["/temp/abc.data","temp/abc.data","../abc.data","~/abc.data"],a:1},
+  {q:"谁是Linux的创始人（选择最合适的答案）",o:["University of Helsinki","AT&T Bell Laboratry","Turbolinux","Linus Torvalds"],a:3},
+  {q:"从下面关于设备独立性的论述中,正确的论述是____。",o:["设备独立性是指I/O 设备具有独立执行I/O 功能的一种特性","设备独立性是指用户程序独立于具体使用的物理设备的一种特性","设备独立性是指设备驱动程序独立于具体使用的物理设备的一种特性","设备独立性是指能独立实现设备共享的一种特性"],a:1},
+  {q:"针对操作系统,下列不正确说法是",o:["提供处理各种硬件的虚拟机抽象","管理所有资源、化解资源请求冲突,避免错误和不当使用计算机","提供标准服务和抽象以便简化应用程序开发","提供高级语言的编译程序"],a:3},
+  {q:"进程控制块是描述进程状态和特性的数据结构,一个进程",o:["可以有多个进程控制块","可以没有进程控制块","只能有唯一的进程控制块","可以和其他进程共用一个进程控制块"],a:2},
+  {q:"当________时,进程从执行状态转变为就绪状态。",o:["进程被调度程序选中","等待某一事件","时间片到","等待的事件发生"],a:2},
+  {q:"资源的按序分配策略可以破坏__________条件。",o:["互斥使用资源","占有且等待资源","循环等待资源","不剥夺资源"],a:2},
+  {q:"假如你得到一个运行命令被拒绝的信息,你可以用哪个命令去修改它的权限使之可以正常运行(选择最合适的答案)",o:["chgrp","path=","chown","chmod"],a:3},
+  {q:"进程从运行状态进入就绪状态的原因可能是 。",o:["时间片用完","等待某一事件","等待的事件已发生","被选中占有处理机"],a:0},
+  {q:"分页式虚拟存储管理系统中,一般来说页面的大小与可能产生缺页中断的次数_____。",o:["无关","成固定比值","成反比","成正比"],a:2},
+  {q:"若两个并发进程相关临界区的互斥信号量M现在值为0,则正确的描述应该是( )。",o:["有一个进程进入临界区","以上都不对","有一个进程进入临界区,另一个在等待进入临界区","没有进程进入临界区"],a:0},
+  {q:"确定myfile的文件类型的命令是什么(选择最合适的答案)",o:["type -q myfile","file myfile","type myfile","whatis myfile"],a:1}
+],multi:[
+  {q:"如果你对文件和目录的权限不确定,则不能用 ( )命令来检测权限.(选择所有正确的)",o:["chown","ls -l","ck","ps"],a:[0,2,3]},
+  {q:"关于linux下列说明哪些是正确的? ( )",o:["Linux 是一个多任务的操作系统.","Linux 是一个类 UNIX的操作系统.","Linux 是一个开放源码的操作系统.","Linux 是一个多用户的操作系统."],a:[0,1,2,3]},
+  {q:"允许多个用户交互方式使用计算机的OS称为( );允许多个用户将作业计算机集中处理的计算机称为( );计算机系统及时处理过程控制数据并作出响应的OS称为( )。",o:["网络OS","批处理OS","多处理器OS","实时OS","E. 分时OS"],a:[4,1,3]},
+  {q:"那些命令可以用来重新启动Linux系统( ). (选择所有正确的)",o:["halt","init 6","\"CONTROL+ALT+DELETE\"","reboot"],a:[1,2,3]},
+  {q:"开放核心源代码有什么优点( ).(选择所有合适的答案)",o:["可以从网上下载最新的核心代码","没有不合法的系统入侵","允许用户开发基于核心的应用程序","容易发现安全漏洞"],a:[0,2,3]},
+  {q:"选择对/proc文件系统正确的描述(选择所有合适的答案)",o:["通常情况下 ,不提供中断、IO端口、CPU等信息.","/proc 是一个虚拟的文件系统","/proc 文件系统可以提供系统核心的许多参数","可以得到系统中运行的进程的一些信息"],a:[1,2,3]},
+  {q:"请选则下列所有可以正确关掉Linux系统的命令 :( ). (选择所有正确的)",o:["init 6","init 0","halt","shutdown -h now"],a:[1,2,3]},
+  {q:"哪些命令组合起来能统计多少用户登录系统( ).(选择所有合适的答案)",o:["who | wc -c","who | wc -l","who | wc","who | wc -w"],a:[1,2]},
+],
+fill:[
+  {q:"死锁产生的四个必要条件是互斥条件、________ 条件、不可剥夺条件和请求与保持条件。",a:"循环等待"},
+  {q:"将当前目录中扩展名为txt的文件全部复制到/home目录中。______________________",a:"cp *.txt /home"},
+  {q:"在单处理器系统中，如果进程存在10个进程，则处于就绪队列中的进程最多______个，处于阻塞队列中的进程最多______个。",a:"9; 10"},
+  {q:"进程控制块(PCB)中保存的一个重要信息是 ________，用于记录进程当前执行的指令地址。",a:"(1) 程序计数器（或PC）"},
+  {q:"_____________是Linux用户层的工作单元，也是Linux进行系统调度的单元。",a:"(1) 1"},
+  {q:"每个 I/O 单元由两部分组成，一个是机械部分，即 I/O 设备本身;另一个是电 子部分，即 __________",a:"(1) 设备控制器"},
+  {q:"查找用户账号文件中是否存在test用户。__________________",a:"cat /etc/passwd | grep test"},
+  {q:"操作系统提供给应用程序的接口是",a:"(1) 系统调用"},
+  {q:"查看进程的命令是____。",a:"ps"},
+  {q:"文件系统的主要功能是_________________。",a:"创建文件和目录管理"},
+  {q:"把文件ff.txt 并用数字的形式(绝对权限)把文件的权限改为rw-rw-rw-。_____________________",a:"chmod 666 ff.txt"},
+  {q:"将/home目录下所以的内容都拷贝到/root目录下。_____________________",a:"cp -R /home /root"}
+]
+},
 };
 // ===== 新增：排序章节 =====
 DS_DATA.ch8={title:"第8章 排序",icon:6,focus:"选择、判断 · 排序算法专题",mc:[
@@ -743,19 +839,7 @@ note:[
 };
 // Constants (SVG, icons, COURSE_META) already declared in first script block
 // Override initA to support fill questions
-function initA(){A={};for(let c in courseData){A[c]={mc:{},tf:{},fill:{},sa:{},code:{}};if(courseData[c].mc)courseData[c].mc.forEach((_,i)=>A[c].mc[i]=false);if(courseData[c].tf)courseData[c].tf.forEach((_,i)=>A[c].tf[i]=false);if(courseData[c].fill)courseData[c].fill.forEach((_,i)=>A[c].fill[i]=false);if(courseData[c].sa)courseData[c].sa.forEach((_,i)=>A[c].sa[i]=false);if(courseData[c].code)courseData[c].code.forEach((_,i)=>A[c].code[i]=false);A[c]._lmc=getLongestMC(courseData[c]);}}
-function clen(c){const n=c.charCodeAt(0);return(n>=0x4e00&&n<=0x9fff)||(n>=0x3000&&n<=0x303f)||(n>=0xff00&&n<=0xffef)?2:1}
-function vlen(s){return[...s].reduce((a,c)=>a+clen(c),0)}
-function getLongestMC(ch){
-  if(!ch||!ch.mc)return [];
-  const r=[];
-  ch.mc.forEach((q,i)=>{
-    const lens=q.o.map(o=>vlen(o));
-    const ml=Math.max(...lens);
-    if(lens[q.a]===ml&&lens.filter(l=>l===ml).length===1)r.push(i);
-  });
-  return r;
-}
+function initA(){A={};for(let c in courseData){A[c]={mc:{},tf:{},fill:{},sa:{},code:{},multi:{},deleted:{}};if(courseData[c].mc)courseData[c].mc.forEach((_,i)=>A[c].mc[i]=false);if(courseData[c].tf)courseData[c].tf.forEach((_,i)=>A[c].tf[i]=false);if(courseData[c].fill)courseData[c].fill.forEach((_,i)=>A[c].fill[i]=false);if(courseData[c].sa)courseData[c].sa.forEach((_,i)=>A[c].sa[i]=false);if(courseData[c].code)courseData[c].code.forEach((_,i)=>A[c].code[i]=false);if(courseData[c].multi)courseData[c].multi.forEach((_,i)=>A[c].multi[i]=false);}}
 function enterCourse(id){
   curCourse=id;
   if(id==='ds')courseData=DS_DATA;
@@ -766,7 +850,7 @@ function enterCourse(id){
   document.getElementById('app').style.display='block';
   document.getElementById('header-title').textContent=COURSE_META[id].title;
   const keys=Object.keys(courseData);
-  cur=keys[0];curType='';
+  cur=keys[0];curType=firstType(courseData[cur])||'';
   initA();buildSidebar();render();
 }
 function goHome(){
@@ -781,7 +865,7 @@ function buildSidebar(){
   const icons=curCourse?COURSE_META[curCourse].icons:DS_ICONS;
   let h=`<div class="sidebar-section"><div class="sidebar-label">章节</div>`;
   for(let c in courseData){
-    const ch=courseData[c],mc=ch.mc?ch.mc.length:0,tf=ch.tf?ch.tf.length:0,fill=ch.fill?ch.fill.length:0,qa=ch.qa?ch.qa.length:0,essay=ch.essay?ch.essay.length:0,sa=ch.sa?ch.sa.length:0,code=ch.code?ch.code.length:0,note=ch.note?ch.note.length:0;
+    const ch=courseData[c],mc=ch.mc?ch.mc.length:0,tf=ch.tf?ch.tf.length:0,fill=ch.fill?ch.fill.length:0,qa=ch.qa?ch.qa.length:0,essay=ch.essay?ch.essay.length:0,sa=ch.sa?ch.sa.length:0,code=ch.code?ch.code.length:0,note=ch.note?ch.note.length:0,multi=ch.multi?ch.multi.length:0;
     const isActive=c===cur;
     h+=`<button class="nav-ch${isActive?' active':''}" data-ch="${c}" onclick="pickCh('${c}',this)">${icons[ch.icon]||icons[0]}${ch.title}</button>`;
     h+=`<div class="nav-types${isActive?' open':''}" id="types-${c}">`;
@@ -793,19 +877,36 @@ function buildSidebar(){
     if(sa)h+=`<button class="nav-type" onclick="pickType('${c}','sa',this)"><span class="dot dot-sa"></span>简答题<span class="cnt">${sa}</span></button>`;
     if(code)h+=`<button class="nav-type" onclick="pickType('${c}','code',this)"><span class="dot dot-code"></span>代码题<span class="cnt">${code}</span></button>`;
     if(note)h+=`<button class="nav-type" onclick="pickType('${c}','note',this)"><span class="dot dot-note"></span>知识点<span class="cnt">${note}</span></button>`;
-    if(mc){const lc=A[c]._lmc.length;if(lc&&lc<mc)h+=`<button class="nav-type" onclick="pickType('${c}','longest',this)"><span class="dot dot-longest"></span>答案最长<span class="cnt">${lc}</span></button>`;}
+    if(multi)h+=`<button class="nav-type" onclick="pickType('${c}','multi',this)"><span class="dot dot-sa"></span>多选题<span class="cnt">${multi}</span></button>`;
     h+=`</div>`;
   }
   h+=`</div>`;
   sb.innerHTML=h;
 }
-function pickCh(c,el){cur=c;curType='';buildSidebar();render();}
+function pickCh(c,el){cur=c;curType=firstType(courseData[c])||'';buildSidebar();render();}
 function pickType(c,t,el){cur=c;curType=t;buildSidebar();render();setTimeout(()=>{const sec=document.getElementById('sec-'+t);if(sec)sec.scrollIntoView({behavior:'smooth',block:'start'});renderMath();},50);}
 function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('open');document.querySelector('.sidebar-overlay').classList.toggle('open');}
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>').replace(/&lt;pre&gt;/g,'<pre>').replace(/&lt;\/pre&gt;/g,'</pre>').replace(/&lt;table class='exam-table'&gt;/g,"<table class='exam-table'>").replace(/&lt;\/table&gt;/g,'</table>').replace(/&lt;tr&gt;/g,'<tr>').replace(/&lt;\/tr&gt;/g,'</tr>').replace(/&lt;th&gt;/g,'<th>').replace(/&lt;\/th&gt;/g,'</th>').replace(/&lt;td&gt;/g,'<td>').replace(/&lt;\/td&gt;/g,'</td>').replace(/&lt;img/g,'<img').replace(/&lt;br\s*\/?&gt;/g,'<br>').replace(/&lt;div/g,'<div').replace(/&lt;\/div&gt;/g,'</div>').replace(/&lt;svg/g,'<svg').replace(/&lt;\/svg&gt;/g,'</svg>').replace(/&lt;circle/g,'<circle').replace(/&lt;line/g,'<line').replace(/&lt;text/g,'<text').replace(/&lt;defs/g,'<defs').replace(/&lt;marker/g,'<marker').replace(/&lt;polygon/g,'<polygon').replace(/&lt;polyline/g,'<polyline');}
 function hlPython(s){return s.replace(/(#[^\n]*)/g,'<span class="cm">$1</span>').replace(/\b(def|class|if|elif|else|while|for|in|return|import|from|None|True|False|and|or|not|is|lambda|try|except|finally|with|as|pass|break|continue|yield|global|nonlocal|assert|del|raise)\b/g,'<span class="kw">$1</span>').replace(/\b(print|len|range|int|str|float|list|dict|set|tuple|input|open|self|append|pop|extend|remove|insert|index|count|sort|reverse|split|join|strip|replace|find|format|enumerate|zip|map|filter|super|__init__|__str__|__repr__)\b/g,'<span class="fn">$1</span>').replace(/(&quot;[^&]*?&quot;|&#39;[^&]*?&#39;)/g,'<span class="st">$1</span>');}
-function totCh(c){const d=courseData[c];return(d.mc?d.mc.length:0)+(d.tf?d.tf.length:0)+(d.fill?d.fill.length:0)+(d.code?d.code.length:0);}
-function doneCh(c){const a=A[c];if(!a)return 0;let d=0;for(let k in a.mc)if(a.mc[k])d++;for(let k in a.tf)if(a.tf[k])d++;for(let k in a.fill)if(a.fill[k])d++;for(let k in a.sa)if(a.sa[k])d++;for(let k in a.code)if(a.code[k])d++;return d;}
+function firstType(ch){
+  for(const t of['mc','tf','multi','fill','qa','essay','sa','code','note'])
+    if(ch[t]&&ch[t].length)return t;
+  return null;
+}
+function totCh(c){
+  const d=courseData[c],a=A[c],del=a&&a.deleted||{};
+  function nd(arr,pre){let n=0;if(arr)arr.forEach((_,i)=>{if(!del[pre+i])n++;});return n;}
+  return nd(d.mc,'mc-')+nd(d.tf,'tf-')+nd(d.fill,'fill-')+nd(d.code,'code-')+nd(d.multi,'multi-')+nd(d.sa,'sa-')+nd(d.qa,'qa-')+nd(d.essay,'essay-');
+}
+function doneCh(c){const a=A[c];if(!a)return 0;let d=0;const del=a.deleted||{};
+  function nd(arr,pre){let n=0;if(arr)arr.forEach((_,i)=>{if(!del[pre+i]&&a[pre.replace('-','')]&&a[pre.replace('-','')][i])n++;});return n;}
+  for(let k in a.mc)if(a.mc[k]&&!del['mc-'+k])d++;
+  for(let k in a.tf)if(a.tf[k]&&!del['tf-'+k])d++;
+  for(let k in a.fill)if(a.fill[k]&&!del['fill-'+k])d++;
+  for(let k in a.sa)if(a.sa[k]&&!del['sa-'+k])d++;
+  for(let k in a.code)if(a.code[k]&&!del['code-'+k])d++;
+  for(let k in a.multi)if(a.multi[k]&&!del['multi-'+k])d++;
+  return d;}
 function render(){
   const m=document.getElementById('main');
   const ch=courseData[cur];if(!ch)return;
@@ -817,10 +918,17 @@ function render(){
   if(ch.mc&&ch.mc.length&&show('mc')){
     h+=`<div class="type-header" id="sec-mc"><span class="type-badge mc">选择题</span><span class="type-title">共 ${ch.mc.length} 题</span></div>`;
     ch.mc.forEach((q,i)=>{
-      const isL=A[cur]._lmc.includes(i);
-      h+=`<div class="q-card" id="mc-${i}"><div class="q-body"><div class="q-stem"><span class="q-num">${i+1}</span><span>${esc(q.q)}${isL?' <span class="tag-longest">答案最长</span>':''}</span></div><div class="options">`;
+      h+=`<div class="q-card" id="mc-${i}"><div class="q-body"><div class="q-stem"><span class="q-num">${i+1}</span><span>${esc(q.q)}</span></div><div class="options">`;
       q.o.forEach((o,oi)=>{const s=o.replace(/^[A-Da-d][.、]\s*/,'');h+=`<div class="opt" data-idx="${i}" data-val="${oi}" onclick="pickMC(${i},${oi})"><span class="opt-dot"></span><span class="opt-label"><b>${L[oi]}</b>${esc(s)}</span></div>`;});
       h+=`</div></div></div>`;
+    });
+  }
+  if(ch.multi&&ch.multi.length&&show('multi')){
+    h+=`<div class="type-header" id="sec-multi"><span class="type-badge multi">多选题</span><span class="type-title">共 ${ch.multi.length} 题</span></div>`;
+    ch.multi.forEach((q,i)=>{
+      h+=`<div class="q-card" id="multi-${i}"><div class="q-body"><div class="q-stem"><span class="q-num">${i+1}</span><span>${esc(q.q)}</span></div><div class="options multi-options">`;
+      q.o.forEach((o,oi)=>{const s=o.replace(/^[A-Da-d][.、]\s*/,'');h+=`<div class="opt" data-multi="${i}" data-val="${oi}" onclick="toggleMulti(${i},${oi})"><span class="opt-dot"></span><span class="opt-label"><b>${L[oi]}</b>${esc(s)}</span></div>`;});
+      h+=`</div><button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="submitMulti(${i})">提交答案</button><div class="ans-box" id="multi-ans-${i}"></div></div></div>`;
     });
   }
   if(ch.tf&&ch.tf.length&&show('tf')){
@@ -832,35 +940,55 @@ function render(){
       h+=`</div><div class="ans-box" id="tf-ans-${i}"></div></div></div>`;
     });
   }
+  function renderDeleteBtn(type,i){
+    if(A[cur].deleted[type+'-'+i])return '';
+    return `<button class="del-btn" onclick="delQ('${type}',${i})" title="删除此题">✕</button>`;
+  }
+  function vc(arr,prefix){let n=0;if(arr)arr.forEach((_,i)=>{if(!A[cur].deleted||!A[cur].deleted[prefix+i])n++;});return n;}
   if(ch.fill&&ch.fill.length&&show('fill')){
-    h+=`<div class="type-header" id="sec-fill"><span class="type-badge fill">填空题</span><span class="type-title">共 ${ch.fill.length} 题</span></div>`;
+    let vis=0,tot=vc(ch.fill,'fill-');
+    h+=`<div class="type-header" id="sec-fill"><span class="type-badge fill">填空题</span><span class="type-title">共 ${tot} 题</span></div>`;
     ch.fill.forEach((q,i)=>{
-      h+=`<div class="q-card" id="fl-${i}"><div class="q-body"><div class="q-stem"><span class="q-num">${i+1}</span><span>${esc(q.q)}</span></div><textarea class="sa-area" placeholder="输入你的答案..."></textarea><button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="showOneAns('fill',${i})">查看答案</button><div class="ans-box" id="fl-ans-${i}"></div></div></div>`;
+      if(A[cur].deleted['fill-'+i])return;
+      vis++;
+      h+=`<div class="q-card" id="fl-${i}"><div class="q-body">${renderDeleteBtn('fill',i)}<div class="q-stem"><span class="q-num">${vis}</span><span>${esc(q.q)}</span></div><textarea class="sa-area" placeholder="输入你的答案..."></textarea><button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="showOneAns('fill',${i})">查看答案</button><div class="ans-box" id="fl-ans-${i}"></div></div></div>`;
     });
   }
   if(ch.qa&&ch.qa.length&&show('qa')){
-    h+=`<div class="type-header" id="sec-qa"><span class="type-badge qa">问答题</span><span class="type-title">共 ${ch.qa.length} 题</span></div>`;
+    let vis=0,tot=vc(ch.qa,'qa-');
+    h+=`<div class="type-header" id="sec-qa"><span class="type-badge qa">问答题</span><span class="type-title">共 ${tot} 题</span></div>`;
     ch.qa.forEach((q,i)=>{
-      h+=`<div class="q-card" id="qa-${i}"><div class="q-body"><div class="q-stem"><span class="q-num">${i+1}</span><span>${esc(q.q)}</span></div><textarea class="sa-area" placeholder="输入你的答案..."></textarea><button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="showOneAns('qa',${i})">查看答案</button><div class="ans-box" id="qa-ans-${i}"></div></div></div>`;
+      if(A[cur].deleted['qa-'+i])return;
+      vis++;
+      h+=`<div class="q-card" id="qa-${i}"><div class="q-body">${renderDeleteBtn('qa',i)}<div class="q-stem"><span class="q-num">${vis}</span><span>${esc(q.q)}</span></div><textarea class="sa-area" placeholder="输入你的答案..."></textarea><button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="showOneAns('qa',${i})">查看答案</button><div class="ans-box" id="qa-ans-${i}"></div></div></div>`;
     });
   }
   if(ch.essay&&ch.essay.length&&show('essay')){
-    h+=`<div class="type-header" id="sec-essay"><span class="type-badge essay">论述题</span><span class="type-title">共 ${ch.essay.length} 题</span></div>`;
+    let vis=0,tot=vc(ch.essay,'essay-');
+    h+=`<div class="type-header" id="sec-essay"><span class="type-badge essay">论述题</span><span class="type-title">共 ${tot} 题</span></div>`;
     ch.essay.forEach((q,i)=>{
-      h+=`<div class="q-card" id="es-${i}"><div class="q-body"><div class="q-stem"><span class="q-num">${i+1}</span><span>${esc(q.q)}</span></div><textarea class="sa-area" placeholder="输入你的答案..."></textarea><button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="showOneAns('essay',${i})">查看答案</button><div class="ans-box" id="es-ans-${i}"></div></div></div>`;
+      if(A[cur].deleted['essay-'+i])return;
+      vis++;
+      h+=`<div class="q-card" id="es-${i}"><div class="q-body">${renderDeleteBtn('essay',i)}<div class="q-stem"><span class="q-num">${vis}</span><span>${esc(q.q)}</span></div><textarea class="sa-area" placeholder="输入你的答案..."></textarea><button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="showOneAns('essay',${i})">查看答案</button><div class="ans-box" id="es-ans-${i}"></div></div></div>`;
     });
   }
   if(ch.sa&&ch.sa.length&&show('sa')){
-    h+=`<div class="type-header" id="sec-sa"><span class="type-badge sa">简答题</span><span class="type-title">共 ${ch.sa.length} 题</span></div>`;
+    let vis=0,tot=vc(ch.sa,'sa-');
+    h+=`<div class="type-header" id="sec-sa"><span class="type-badge sa">简答题</span><span class="type-title">共 ${tot} 题</span></div>`;
     ch.sa.forEach((q,i)=>{
-      h+=`<div class="q-card" id="sa-${i}"><div class="q-body"><div class="q-stem"><span class="q-num">${i+1}</span><span>${esc(q.q)}</span></div><textarea class="sa-area" placeholder="输入你的答案..."></textarea><button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="showOneAns('sa',${i})">查看答案</button><div class="ans-box" id="sa-ans-${i}"></div></div></div>`;
+      if(A[cur].deleted['sa-'+i])return;
+      vis++;
+      h+=`<div class="q-card" id="sa-${i}"><div class="q-body">${renderDeleteBtn('sa',i)}<div class="q-stem"><span class="q-num">${vis}</span><span>${esc(q.q)}</span></div><textarea class="sa-area" placeholder="输入你的答案..."></textarea><button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="showOneAns('sa',${i})">查看答案</button><div class="ans-box" id="sa-ans-${i}"></div></div></div>`;
     });
   }
   if(ch.code&&ch.code.length&&show('code')){
-    h+=`<div class="type-header" id="sec-code"><span class="type-badge code">代码题</span><span class="type-title">共 ${ch.code.length} 题</span></div>`;
+    let vis=0,tot=vc(ch.code,'code-');
+    h+=`<div class="type-header" id="sec-code"><span class="type-badge code">代码题</span><span class="type-title">共 ${tot} 题</span></div>`;
     ch.code.forEach((q,i)=>{
+      if(A[cur].deleted['code-'+i])return;
+      vis++;
       let qHtml=esc(q.q).replace(/&lt;pre&gt;([\s\S]*?)&lt;\/pre&gt;/g,(m,code)=>'<pre>'+hlPython(code)+'</pre>');
-      h+=`<div class="q-card" id="code-${i}"><div class="q-body"><div class="q-stem"><span class="q-num">${i+1}</span><span>${qHtml}</span></div><textarea class="sa-area" placeholder="输入你的代码/答案..."></textarea><button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="showOneAns('code',${i})">查看答案</button><div class="ans-box" id="code-ans-${i}"></div></div></div>`;
+      h+=`<div class="q-card" id="code-${i}"><div class="q-body">${renderDeleteBtn('code',i)}<div class="q-stem"><span class="q-num">${vis}</span><span>${qHtml}</span></div><textarea class="sa-area" placeholder="输入你的代码/答案..."></textarea><button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="showOneAns('code',${i})">查看答案</button><div class="ans-box" id="code-ans-${i}"></div></div></div>`;
     });
   }
   if(ch.note&&ch.note.length&&show('note')){
@@ -869,19 +997,44 @@ function render(){
       h+=`<div class="q-card"><div class="q-body"><div class="note-h">${esc(q.h)}</div><div class="note-c">${q.c}</div></div></div>`;
     });
   }
-  if(show('longest')&&ch.mc){
-    const lmc=A[cur]._lmc;
-    if(lmc.length){
-      h+=`<div class="type-header" id="sec-longest"><span class="type-badge longest">答案最长</span><span class="type-title">共 ${lmc.length} 题（答案文本最长且正确）</span></div>`;
-      lmc.forEach(i=>{
-        const q=ch.mc[i];
-        h+=`<div class="q-card" id="mc-${i}"><div class="q-body"><div class="q-stem"><span class="q-num">${i+1}</span><span>${esc(q.q)}</span></div><div class="options">`;
-        q.o.forEach((o,oi)=>{const s=o.replace(/^[A-Da-d][.、]\s*/,'');h+=`<div class="opt" data-idx="${i}" data-val="${oi}" onclick="pickMC(${i},${oi})"><span class="opt-dot"></span><span class="opt-label"><b>${L[oi]}</b>${esc(s)}</span></div>`;});
-        h+=`</div></div></div>`;
-      });
-      }}
   m.innerHTML=h;
   renderMath();
+}
+let multiSel={};
+function toggleMulti(idx,val){
+  if(!multiSel[cur])multiSel[cur]={};
+  if(!multiSel[cur][idx])multiSel[cur][idx]=[];
+  const arr=multiSel[cur][idx];const pos=arr.indexOf(val);
+  if(pos>=0)arr.splice(pos,1);else arr.push(val);
+  const card=document.getElementById(`multi-${idx}`);
+  if(card)card.querySelectorAll('.opt[data-multi="'+idx+'"]').forEach(o=>{
+    const v=parseInt(o.dataset.val);
+    o.classList.toggle('selected',arr.includes(v));
+  });
+}
+function submitMulti(idx){
+  const q=courseData[cur].multi[idx];if(!q)return;
+  if(A[cur].multi[idx])return;
+  const sel=multiSel[cur]&&multiSel[cur][idx]||[];
+  const correct=q.a,isRight=sel.length===correct.length&&sel.every(v=>correct.includes(v));
+  A[cur].multi[idx]=true;
+  const card=document.getElementById(`multi-${idx}`);
+  if(card)card.querySelectorAll('.opt[data-multi="'+idx+'"]').forEach(o=>{
+    const v=parseInt(o.dataset.val);o.style.pointerEvents='none';
+    if(correct.includes(v)){o.classList.add('correct');o.querySelector('.opt-dot').innerHTML=SVG.check;}
+    else if(sel.includes(v)){o.classList.add('wrong');o.querySelector('.opt-dot').innerHTML=SVG.cross;}
+  });
+  const box=document.getElementById(`multi-ans-${idx}`);
+  const L='ABCD',ansStr=correct.map(c=>L[c]).join('');
+  box.className='ans-box show '+(isRight?'ok':'fail');
+  box.innerHTML=`<div class="ans-title">${isRight?SVG.check:SVG.cross} ${isRight?'正确':'错误'}</div>${isRight?'':'你的答案：'+(sel.map(c=>L[c]).join('')||'未选')+'　'}正确答案：${ansStr}`;
+  updateProgress();
+}
+function delQ(type,idx){
+  if(!confirm('确定要删除此题吗？'))return;
+  if(!A[cur].deleted)A[cur].deleted={};
+  A[cur].deleted[type+'-'+idx]=true;
+  render();
 }
 function pickMC(idx,val){
   if(A[cur].mc[idx])return;A[cur].mc[idx]=true;
@@ -938,6 +1091,19 @@ function submitAll(){
       A[cur].tf[i]=true;
     }
   });
+  if(ch.multi)ch.multi.forEach((q,i)=>{
+    tot++;
+    const sel=multiSel[cur]&&multiSel[cur][i]||[];
+    const correct=q.a;
+    if(sel.length===correct.length&&sel.every(v=>correct.includes(v)))ok++;
+    if(!A[cur].multi[i]){
+      const card=document.getElementById(`multi-${i}`);
+      if(card)card.querySelectorAll('.opt[data-multi="'+i+'"]').forEach(o=>{o.style.pointerEvents='none';const v=parseInt(o.dataset.val);if(correct.includes(v)){o.classList.add('correct');o.querySelector('.opt-dot').innerHTML=SVG.check;}});
+      const box=document.getElementById(`multi-ans-${i}`);
+      if(box)box.className='ans-box show fail';
+      A[cur].multi[i]=true;
+    }
+  });
   if(ch.fill)ch.fill.forEach((q,i)=>{
     tot++;
     if(!A[cur].fill[i])A[cur].fill[i]=true;
@@ -957,6 +1123,7 @@ function showOneAns(type,idx){
   if(type==='essay'){q=ch.essay[idx];ansId=`es-ans-${idx}`;}
   if(type==='sa'){q=ch.sa[idx];ansId=`sa-ans-${idx}`;}
   if(type==='code'){q=ch.code[idx];ansId=`code-ans-${idx}`;}
+  if(type==='multi'){q=ch.multi[idx];ansId=`multi-ans-${idx}`;}
   if(!q)return;
   const box=document.getElementById(ansId);
   if(box.classList.contains('show')){box.className='ans-box';return;}
