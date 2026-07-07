@@ -110,7 +110,9 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(
 .type-header{display:flex;align-items:center;gap:10px;margin:32px 0 16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
 .type-header:first-of-type{margin-top:0}
 .type-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:.78rem;font-weight:700;color:#fff;flex-shrink:0}
-.type-badge.mc{background:#4f46e5}.type-badge.tf{background:#059669}.type-badge.sa{background:#d97706}.type-badge.fill{background:#7c3aed}.type-badge.qa{background:#0891b2}.type-badge.essay{background:#be185d}.type-badge.code{background:#dc2626}.type-badge.note{background:#0ea5e9}
+.type-badge.mc{background:#4f46e5}.type-badge.tf{background:#059669}.type-badge.sa{background:#d97706}.type-badge.fill{background:#7c3aed}.type-badge.qa{background:#0891b2}.type-badge.essay{background:#be185d}.type-badge.code{background:#dc2626}.type-badge.note{background:#0ea5e9}.type-badge.longest{background:#e11d48}
+.dot-longest{background:#e11d48}
+.tag-longest{display:inline-block;font-size:.68rem;font-weight:700;color:#fff;background:#e11d48;padding:1px 8px;border-radius:10px;margin-left:6px;vertical-align:middle}
 .type-title{font-size:.95rem;font-weight:700;color:var(--text)}
 .q-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px 10px;margin-bottom:12px;transition:var(--transition)}
 .q-card:hover{box-shadow:var(--shadow);border-color:var(--border2)}
@@ -772,7 +774,17 @@ note:[
 
 // Constants (SVG, icons, COURSE_META) already declared in first script block
 // Override initA to support fill questions
-function initA(){A={};for(let c in courseData){A[c]={mc:{},tf:{},fill:{},sa:{},code:{}};if(courseData[c].mc)courseData[c].mc.forEach((_,i)=>A[c].mc[i]=false);if(courseData[c].tf)courseData[c].tf.forEach((_,i)=>A[c].tf[i]=false);if(courseData[c].fill)courseData[c].fill.forEach((_,i)=>A[c].fill[i]=false);if(courseData[c].sa)courseData[c].sa.forEach((_,i)=>A[c].sa[i]=false);if(courseData[c].code)courseData[c].code.forEach((_,i)=>A[c].code[i]=false);}}
+function initA(){A={};for(let c in courseData){A[c]={mc:{},tf:{},fill:{},sa:{},code:{}};if(courseData[c].mc)courseData[c].mc.forEach((_,i)=>A[c].mc[i]=false);if(courseData[c].tf)courseData[c].tf.forEach((_,i)=>A[c].tf[i]=false);if(courseData[c].fill)courseData[c].fill.forEach((_,i)=>A[c].fill[i]=false);if(courseData[c].sa)courseData[c].sa.forEach((_,i)=>A[c].sa[i]=false);if(courseData[c].code)courseData[c].code.forEach((_,i)=>A[c].code[i]=false);A[c]._lmc=getLongestMC(courseData[c]);}}
+
+function getLongestMC(ch){
+  if(!ch||!ch.mc)return [];
+  const r=[];
+  ch.mc.forEach((q,i)=>{
+    const ml=Math.max(...q.o.map(o=>o.length));
+    if(q.o[q.a].length===ml&&q.o.filter(o=>o.length===ml).length===1)r.push(i);
+  });
+  return r;
+}
 
 function enterCourse(id){
   curCourse=id;
@@ -813,6 +825,7 @@ function buildSidebar(){
     if(sa)h+=`<button class="nav-type" onclick="pickType('${c}','sa',this)"><span class="dot dot-sa"></span>简答题<span class="cnt">${sa}</span></button>`;
     if(code)h+=`<button class="nav-type" onclick="pickType('${c}','code',this)"><span class="dot dot-code"></span>代码题<span class="cnt">${code}</span></button>`;
     if(note)h+=`<button class="nav-type" onclick="pickType('${c}','note',this)"><span class="dot dot-note"></span>知识点<span class="cnt">${note}</span></button>`;
+    if(mc){const lc=A[c]._lmc.length;if(lc)h+=`<button class="nav-type" onclick="pickType('${c}','longest',this)"><span class="dot dot-longest"></span>答案最长<span class="cnt">${lc}</span></button>`;}
     h+=`</div>`;
   }
   h+=`</div>`;
@@ -841,7 +854,8 @@ function render(){
   if(ch.mc&&ch.mc.length&&show('mc')){
     h+=`<div class="type-header" id="sec-mc"><span class="type-badge mc">选择题</span><span class="type-title">共 ${ch.mc.length} 题</span></div>`;
     ch.mc.forEach((q,i)=>{
-      h+=`<div class="q-card" id="mc-${i}"><div class="q-body"><div class="q-stem"><span class="q-num">${i+1}</span><span>${esc(q.q)}</span></div><div class="options">`;
+      const isL=A[cur]._lmc.includes(i);
+      h+=`<div class="q-card" id="mc-${i}"><div class="q-body"><div class="q-stem"><span class="q-num">${i+1}</span><span>${esc(q.q)}${isL?' <span class="tag-longest">答案最长</span>':''}</span></div><div class="options">`;
       q.o.forEach((o,oi)=>{const s=o.replace(/^[A-Da-d][.、]\s*/,'');h+=`<div class="opt" data-idx="${i}" data-val="${oi}" onclick="pickMC(${i},${oi})"><span class="opt-dot"></span><span class="opt-label"><b>${L[oi]}</b>${esc(s)}</span></div>`;});
       h+=`</div></div></div>`;
     });
@@ -892,6 +906,16 @@ function render(){
       h+=`<div class="q-card"><div class="q-body"><div class="note-h">${esc(q.h)}</div><div class="note-c">${q.c}</div></div></div>`;
     });
   }
+  if(show('longest')&&ch.mc){
+    const lmc=A[cur]._lmc;
+    if(lmc.length){
+      h+=`<div class="type-header" id="sec-longest"><span class="type-badge longest">答案最长</span><span class="type-title">共 ${lmc.length} 题（答案文本最长且正确）</span></div>`;
+      lmc.forEach(i=>{
+        const q=ch.mc[i];
+        h+=`<div class="q-card" id="mc-${i}"><div class="q-body"><div class="q-stem"><span class="q-num">${i+1}</span><span>${esc(q.q)}</span></div><div class="options">`;
+        q.o.forEach((o,oi)=>{const s=o.replace(/^[A-Da-d][.、]\s*/,'');h+=`<div class="opt" data-idx="${i}" data-val="${oi}" onclick="pickMC(${i},${oi})"><span class="opt-dot"></span><span class="opt-label"><b>${L[oi]}</b>${esc(s)}</span></div>`;});
+        h+=`</div></div></div>`;
+      });
   m.innerHTML=h;
   renderMath();
 }
